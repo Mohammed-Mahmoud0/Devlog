@@ -37,6 +37,7 @@ class updateUserSerializer(serializers.ModelSerializer):
             "username",
             "first_name",
             "last_name",
+            "job_title",
             "bio",
             "profile_picture",
             "facebook",

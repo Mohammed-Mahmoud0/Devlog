@@ -96,6 +96,30 @@ async function getUserInfo(username) {
   }
 }
 
+async function updateProfile(data) {
+  try {
+    const response = await api.put(`update_user/`, data);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    if (err.response?.data) {
+      const errors = err.response.data;
+      if (errors.profile_picture) {
+        throw new Error("Invalid image file. Please upload a valid image.");
+      }
+      if (errors.username) {
+        throw new Error(errors.username[0]);
+      }
+      const firstField = Object.keys(errors)[0];
+      if (firstField && errors[firstField][0]) {
+        throw new Error(`${firstField}: ${errors[firstField][0]}`);
+      }
+      throw new Error("Failed to update profile");
+    }
+
+    throw new Error(err.message);
+  }
+}
 export {
   getBlogs,
   getBlogDetails,
@@ -106,4 +130,5 @@ export {
   updateBlog,
   deleteBlog,
   getUserInfo,
+  updateProfile,
 };

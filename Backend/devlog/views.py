@@ -40,9 +40,12 @@ def get_username(request):
 @api_view(["GET"])
 def get_userinfo(request, username):
     User = get_user_model()
-    user = User.objects.get(username=username)
-    serializer = UserInfoSerializer(user)
-    return Response(serializer.data)
+    try:
+        user = User.objects.get(username=username)
+        serializer = UserInfoSerializer(user)
+        return Response(serializer.data)
+    except User.DoesNotExist:
+        return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(["GET"])
@@ -63,6 +66,7 @@ def update_user_profile(request):
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
+    print("Validation errors:", serializer.errors)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

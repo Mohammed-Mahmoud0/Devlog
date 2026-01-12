@@ -4,9 +4,14 @@ import { getUserInfo } from "@/services/apiBlog";
 import Spinner from "@/ui_components/Spinner";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import Modal from "@/ui_components/Modal";
+import SignupPage from "./SignupPage";
+import { useState } from "react";
 
-const ProfilePage = () => {
+const ProfilePage = ({ authUsername }) => {
   const { username } = useParams();
+  const [showModal, setShowModal] = useState(false);
+  const toggleModal = () => setShowModal((current) => !current);
 
   const { isPending, data } = useQuery({
     queryKey: ["users", username],
@@ -21,8 +26,21 @@ const ProfilePage = () => {
 
   return (
     <>
-      <Hero userInfo={data} />
+      <Hero
+        userInfo={data}
+        authUsername={authUsername}
+        toggleModal={toggleModal}
+      />
       <BlogContainer blogs={blogs} title={`${username}'s Posts`} />
+      {showModal && (
+        <Modal toggleModal={toggleModal}>
+          <SignupPage 
+            userInfo={data} 
+            updateForm={true} 
+            toggleModal={toggleModal}
+          />
+        </Modal>
+      )}
     </>
   );
 };

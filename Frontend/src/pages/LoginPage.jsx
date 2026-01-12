@@ -22,7 +22,7 @@ const LoginPage = ({ setIsAuthenticated, setUsername }) => {
       getUsername().then((data) => {
         setUsername(data.username);
       });
-      toast.success("You have successfully signed up!!");
+      toast.success("You have successfully signed in!");
       const from = location?.state?.from?.pathname || "/";
       navigate(from, { replace: true });
     },

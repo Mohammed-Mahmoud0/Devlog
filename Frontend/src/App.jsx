@@ -11,6 +11,7 @@ import ProtectedRoute from "./ui_components/ProtectedRoute";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getUsername } from "./services/apiBlog";
+import NotFoundPage from "./pages/NotFoundPage";
 
 const App = () => {
   const [username, setUsername] = useState(null);
@@ -47,7 +48,11 @@ const App = () => {
           }
         >
           <Route index element={<HomePage />} />
-          <Route path="profile/:username" element={<ProfilePage />} />
+          <Route path="*" element={<NotFoundPage />} />
+          <Route
+            path="profile/:username"
+            element={<ProfilePage authUsername={username} />}
+          />
           <Route
             path="blogs/:slug"
             element={
